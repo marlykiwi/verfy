@@ -2,7 +2,8 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-import MyForm from "./components/Form";
+import SenderForm from "./components/SenderForm";
+import ReceiverForm from "./components/ReceiverForm";
 import Profile from "./components/Profile";
 import MyWallet from "./components/MyWallet";
 
@@ -13,9 +14,9 @@ function App() {
     <>
       <MyWallet />
       <Profile />
-      <MyForm />
+      <SenderForm />
       <hr />
-      <MyForm />
+      <ReceiverForm />
     </>
   );
 }
