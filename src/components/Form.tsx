@@ -1,6 +1,8 @@
-import { signMessage } from "@wagmi/core";
+import { signMessage, writeContract } from "@wagmi/core";
+import { recoverPublicKey } from "viem";
 import { config } from "../config";
 import { useAccount } from "wagmi";
+import { abi } from "../abi";
 
 function MyForm() {
   const { address } = useAccount();
@@ -11,8 +13,21 @@ function MyForm() {
 
     const hashHex = hashBufferToHexString(hashBuffer);
 
-    const result = await signMessage(config, { message: hashHex });
-    console.log(result);
+    const signature = await signMessage(config, { message: hashHex });
+
+    const publicKey = await recoverPublicKey({
+      hash: hashHex,
+      signature,
+    });
+
+    const txhash = await writeContract(config, {
+      abi,
+      address: "0x0170517C3c6F2569051fC9DD0040452a49eB8650",
+      functionName: "set",
+      args: [hashHex, publicKey, signature],
+    });
+
+    console.log("TX Hash", txhash);
   }
 
   return (
@@ -22,11 +37,10 @@ function MyForm() {
   );
 }
 
-function hashBufferToHexString(hashBuffer: ArrayBuffer) {
+function hashBufferToHexString(hashBuffer: ArrayBuffer): `0x${string}` {
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   let hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
-
-  return "0x" + hashHex;
+  return `0x${hashHex}`;
 }
 
 export default MyForm;

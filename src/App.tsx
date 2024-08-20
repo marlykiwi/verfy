@@ -14,6 +14,8 @@ function App() {
       <MyWallet />
       <Profile />
       <MyForm />
+      <hr />
+      <MyForm />
     </>
   );
 }
