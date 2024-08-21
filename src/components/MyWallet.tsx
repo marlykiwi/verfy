@@ -14,7 +14,7 @@ export default function WalletOptions() {
 
   return <>
     <h3>1. Connect Wallet</h3>
-    {buttons}
+    {buttons[0]}
     <div style={{marginTop: 20, marginBottom: 20}}></div>
   </>
 }
