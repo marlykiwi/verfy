@@ -1,50 +1,39 @@
-# React + TypeScript + Vite
+# Verfy - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+E-Mail Attachment authentication using Blockchain technology.
 
-Currently, two official plugins are available:
+This is the repository that includes the code for the frontend. The Smart Contracts can be found [here](https://github.com/marlykiwi/verfy-contracts).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Setup
 
-## Expanding the ESLint configuration
+1. `git clone <url>`
+2. `npm install`
+3. `npm run dev`
+4. Follow instructions on the terminal
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## How it works
 
-- Configure the top-level `parserOptions` property like this:
+To ensure the authenticity of E-Mail attachments we ask the sender to sign a SHA-256 hash of the attachment via Metamask. Once done, the document hash alongside the signature is stored in a Smart Contract on-chain.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+The E-Mail recipient who knows the account address of the sender would download the E-Mail attachment once she received the E-Mail. Using our tool she can recompute the SHA-256 hash of the document which is then used to query the Smart Contract on-chain to retrieve the signature over such document. A signature verification using the account address known to the receiver reveals if the document was signed by the sender and is therefore safe to open.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Usage
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+### Sender
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+Follow the outlined steps if you're a sender who wants to authenticate E-Mail attachments.
+
+1. Connect your Metamask wallet
+2. Upload a file via the file-picker
+3. Sign the hash of the attachment you're about to send (simply follow the instructions of the Metamask
+4. Post your signature alongside the hash of the attachment you're about to sent on-chain (simply follow the instructions of the Metamask popup)
+5. Follow the link that will be shown to see how / when the aforementioned data is stored on-chain
+6. Send your E-Mail as you'd usually do
+
+### Recipient
+
+Follow the outlined steps if you're a recipient of an E-Mail with an attachment.
+
+1. Paste the account address of the recipient you're expecting the E-Mail from
+2. Download the attachment from the E-Mail you received
+3. A message will be shown whether the E-Mail attachment was actually sent by the recipient
