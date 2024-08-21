@@ -5,9 +5,16 @@ export default function WalletOptions() {
   const { connectors, connect } = useConnect();
   console.log(connectors);
 
-  return connectors.map((connector) => (
+
+  const buttons =  connectors.map((connector) => (
     <button key={connector.uid} onClick={() => connect({ connector })}>
       {connector.name}
     </button>
   ));
+
+  return <>
+    <h3>1. Connect Wallet</h3>
+    {buttons}
+    <div style={{marginTop: 20, marginBottom: 20}}></div>
+  </>
 }

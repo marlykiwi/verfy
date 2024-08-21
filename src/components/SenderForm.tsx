@@ -32,7 +32,8 @@ function MyForm() {
 
   return (
     <>
-      <input type="file" onChange={handleChange} disabled={!address} />
+      <h3>2. Select File</h3>
+      <input id="file" type="file" onChange={handleChange} disabled={!address} />
     </>
   );
 }

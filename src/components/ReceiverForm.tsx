@@ -51,17 +51,21 @@ function MyForm() {
 
   return (
     <>
-      <input
-        type="text"
-        value={publicKey}
-        onChange={(e: any) => setPublicKey(e.target.value)}
-      />
-      <input type="file" onChange={handleChange} />
       {isSignatureValid && (
-        <p style={{ backgroundColor: "green", color: "white" }}>
+        <p style={{ borderRadius: 5, padding: 10, backgroundColor: "green", color: "white" }}>
           Attachment signature valid
         </p>
       )}
+      <h3>1. Enter Recipient Address</h3>
+      <input
+        id="trusted-address"
+        type="text"
+        value={publicKey}
+        placeholder="Recipient Address"
+        onChange={(e: any) => setPublicKey(e.target.value)}
+      />
+      <h3>2. Select File</h3>
+      <input type="file" onChange={handleChange} />
     </>
   );
 }

@@ -12,10 +12,12 @@ function App() {
 
   return (
     <>
+      <h2>Sender</h2>
       <MyWallet />
       <Profile />
       <SenderForm />
       <hr />
+      <h2>Recipient</h2>
       <ReceiverForm />
     </>
   );
