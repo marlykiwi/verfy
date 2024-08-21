@@ -8,6 +8,7 @@ import { useState } from "react";
 function MyForm() {
   const { address } = useAccount();
   const [txHash, setTxHash] = useState('')
+  const [hash, setHash] = useState('')
 
   async function handleChange(event: any) {
     const buffer = await event?.target.files[0].arrayBuffer();
@@ -15,6 +16,8 @@ function MyForm() {
     const hashBuffer = await window.crypto.subtle.digest("SHA-256", buffer);
 
     const hashHex = hashBufferToHexString(hashBuffer);
+
+    setHash(hashHex)
 
     const signature = await signMessage(config, { message: hashHex });
 
@@ -37,8 +40,18 @@ function MyForm() {
     <>
       <h3>2. Select File</h3>
       <input id="file" type="file" onChange={handleChange} disabled={!address} />
+      {hash && (
+        <>
+          <div style={{marginTop: 20}}></div>
+          <label for="hash">File Hash (SHA-256)</label>
+          <input id="hash" value={hash}></input>
+        </>
+      )}
       {txHash && (
-        <a href={`https://sepolia.etherscan.io/tx/${txHash}`} target="_blank">Go to Transaction</a>
+        <>
+          <div style={{marginTop: 20}}></div>
+          <a href={`https://sepolia.etherscan.io/tx/${txHash}`} target="_blank">Go to Transaction</a>
+        </>
       )}
     </>
   );
