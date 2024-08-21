@@ -3,9 +3,12 @@ import { recoverPublicKey } from "viem";
 import { config } from "../config";
 import { useAccount } from "wagmi";
 import { abi } from "../abi";
+import { useState } from "react";
 
 function MyForm() {
   const { address } = useAccount();
+  const [txHash, setTxHash] = useState('')
+
   async function handleChange(event: any) {
     const buffer = await event?.target.files[0].arrayBuffer();
 
@@ -20,20 +23,23 @@ function MyForm() {
       signature,
     });
 
-    const txhash = await writeContract(config, {
+    const result = await writeContract(config, {
       abi,
       address: "0x0170517C3c6F2569051fC9DD0040452a49eB8650",
       functionName: "set",
       args: [hashHex, publicKey, signature],
     });
 
-    console.log("TX Hash", txhash);
+    setTxHash(result)
   }
 
   return (
     <>
       <h3>2. Select File</h3>
       <input id="file" type="file" onChange={handleChange} disabled={!address} />
+      {txHash && (
+        <a href={`https://sepolia.etherscan.io/tx/${txHash}`} target="_blank">Go to Transaction</a>
+      )}
     </>
   );
 }
