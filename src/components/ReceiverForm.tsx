@@ -4,12 +4,10 @@ import { config } from "../config";
 import { abi } from "../abi";
 import { useState } from "react";
 
-const TRUSTED_PUBLIC_KEY =
-  "0x046a29e33b958adc57c65612034dea287898f18aa75f441f19b08143b30c48e9bc8493a72a0d67b11230e8eed467ef739b773cfbd4e7687041b2f1d0eeab9909d0";
 
 function MyForm() {
+  const [address, setAddress] = useState('');
   const [isSignatureValid, setIsSignatureValid] = useState(false);
-  const [publicKey, setPublicKey] = useState(TRUSTED_PUBLIC_KEY);
 
   async function handleChange(event: any) {
     const buffer = await event?.target.files[0].arrayBuffer();
@@ -25,23 +23,17 @@ function MyForm() {
       args: [hashHex],
     });
 
-    const recoveredPublicKey = await recoverPublicKey({
-      hash: hashHex,
-      signature: data.signature,
-    });
-
-    if (recoveredPublicKey != publicKey) {
-      alert("Public Key mismatch!");
-      return;
-    }
-
-    const address = await recoverMessageAddress({
+    const recoveredAddress = await recoverMessageAddress({
       message: hashHex,
       signature: data.signature,
     });
 
+    if (address != recoveredAddress) {
+      alert('Recipient address doesn\'t match signer address!')
+    }
+
     const result = await verifyMessage(config, {
-      address: address,
+      address: recoveredAddress,
       message: hashHex,
       signature: data.signature,
     });
@@ -60,12 +52,12 @@ function MyForm() {
       <input
         id="trusted-address"
         type="text"
-        value={publicKey}
+        value={address}
         placeholder="Recipient Address"
-        onChange={(e: any) => setPublicKey(e.target.value)}
+        onChange={(e: any) => setAddress(e.target.value)}
       />
       <h3>2. Select File</h3>
-      <input type="file" onChange={handleChange} />
+      <input type="file" onChange={handleChange} disabled={!address} />
     </>
   );
 }
